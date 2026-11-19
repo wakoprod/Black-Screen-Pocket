@@ -1,20 +1,41 @@
 # Pocket Black Screen 1.0
 
-Application Android native en Kotlin pour le Xiaomi Redmi Note 10 Pro sous Android 12. La tuile des réglages rapides pose une couche noire opaque sur la zone applicative autorisée par Android. Elle absorbe les gestes dans cette zone et laisse le lecteur gérer sa lecture audio. Deux appuis brefs et proches au même endroit, espacés d’au plus 300 ms, retirent la couche au relâchement du deuxième appui.
+**Écoutez un podcast, une vidéo ou de la musique sans déclencher de commandes par accident.**
 
-## Installer et configurer sur le Redmi Note 10 Pro
+Activez Pocket Black Screen depuis les réglages rapides avant de glisser votre téléphone dans votre poche. Un écran noir opaque intercepte les appuis et les glissements dans la zone couverte. Deux appuis rapides au même endroit vous rendent la main.
 
-1. Relever les versions d’Android et de MIUI dans **Paramètres → À propos du téléphone**. Les intitulés suivants varient selon la version et la région de MIUI.
-2. Copier `PocketBlackScreen-v1.0-debug.apk` sur le téléphone et l’ouvrir depuis le gestionnaire de fichiers. Si Android le demande, autoriser cette source à installer des applications, puis installer l’APK. Cette autorisation peut être retirée après installation.
-3. Ouvrir **Pocket Black Screen**. Dans **Autorisations**, choisir **Configurer la superposition**, sélectionner Pocket Black Screen et autoriser l’affichage par-dessus les autres applications. Android 12 peut ouvrir la liste générale. Si nécessaire, vérifier les réglages propres à Pocket Black Screen dans **Paramètres → Applications → Gérer les applications → Pocket Black Screen → Autres autorisations**. Selon MIUI, la rubrique peut mentionner les fenêtres flottantes ou les fenêtres contextuelles en arrière-plan. Activer uniquement l’autorisation de cette application qui est nécessaire sur l’appareil.
-4. Autoriser **État du téléphone**. Dans les réglages de notification de l’application, vérifier que les notifications et la catégorie **Protection tactile** sont actives. Android 12 n’affiche pas de demande d’autorisation `POST_NOTIFICATIONS`. Sur Android 13 ou ultérieur, cette demande apparaît si nécessaire.
-5. Déployer les réglages rapides ou le Centre de contrôle. Sur les versions de MIUI avec un Centre de contrôle séparé, celui-ci s’ouvre normalement en glissant depuis le haut droit. Ouvrir **Modifier** (crayon), repérer **Pocket Black Screen** dans les tuiles disponibles, l’ajouter puis valider. Si les autorisations viennent d’être accordées, rouvrir le panneau.
+- **Activation en un geste** depuis la tuile au cadenas, même quand aucun média ne joue.
+- **Arrêt au choix** par double-appui, depuis la tuile ou via l’action **Désactiver** de la notification.
+- **Durée réglable** de 30, 60, 120 ou 240 minutes.
+- **Fonctionnement local**, sans publicité ni autorisation d’accès à Internet.
+
+Le lecteur garde la main sur le son. La lecture peut dépendre de ses règles, de l’abonnement et du comportement d’Android lorsque l’écran s’éteint physiquement.
+
+## Versions Android
+
+| Version | État de la compatibilité |
+| --- | --- |
+| Android 11 et antérieurs (API 30 ou moins) | L’APK exige au minimum l’API 31. Android refuse l’installation sur ces versions. |
+| Android 12 (API 31) | Installation vérifiée sur un émulateur Android. Le fonctionnement sur téléphone physique reste à valider. |
+| Android 12L à Android 16 (API 32 à 36) | Versions admises par l’APK. Le code prévoit les adaptations d’Android 13 pour les notifications et d’Android 14 pour la tuile et le service. Les parcours complets restent à tester sur ces versions. |
+
+`minSdk = 31` fixe la version minimale d’installation. `targetSdk = 36` indique que l’application cible les règles d’Android 16. Sur Xiaomi et les autres appareils à interface constructeur, les réglages de superposition et le maintien de la protection peuvent varier. L’état des essais figure dans la [matrice de recette](RECETTE.md).
+
+## Installer et configurer
+
+Depuis le dépôt, générez l’APK debug avec `./gradlew :app:assembleDebug` à la racine du projet. Gradle crée `app/build/outputs/apk/debug/app-debug.apk`. Les prérequis sont détaillés dans [Projet Android Studio](#projet-android-studio).
+
+1. Copiez l’APK sur le téléphone et ouvrez-le depuis le gestionnaire de fichiers. Si Android le demande, autorisez l’installation depuis cette source. Vous pouvez retirer cette autorisation après l’installation.
+2. Ouvrez **Pocket Black Screen** et touchez **Configurer la superposition**. Si Android affiche une liste d’applications, choisissez **Pocket Black Screen**, puis activez **Autoriser l’affichage par-dessus d’autres applications**. De retour dans l’application, la ligne **Superposition** doit indiquer **Autorisé**.
+3. Sur Xiaomi, si nécessaire, vérifiez les réglages propres à **Pocket Black Screen** dans **Paramètres → Applications → Gérer les applications → Pocket Black Screen → Autres autorisations**. Selon la version de MIUI, la rubrique peut mentionner les fenêtres flottantes ou les fenêtres contextuelles en arrière-plan.
+4. Autorisez **État du téléphone** si l’appareil dispose de la téléphonie. Vérifiez que les notifications de l’application et la catégorie **Protection tactile** sont actives. À partir d’Android 13, accordez l’autorisation de notification si l’application la demande.
+5. Déployez les réglages rapides ou le Centre de contrôle, ouvrez **Modifier** (crayon), puis ajoutez la tuile **Pocket Black Screen**. Sur les versions de MIUI avec un Centre de contrôle séparé, glissez depuis le coin supérieur droit. Si la tuile ouvre les réglages de l’application, vérifiez les lignes qui affichent **À configurer**.
 
 Avec ADB déjà configuré pour une session de développement, on peut aussi installer l’APK par USB avec `adb install -r PocketBlackScreen-v1.0-debug.apk`. L’application n’a besoin ni d’ADB ni du débogage USB pour fonctionner.
 
 ## Utiliser et récupérer la main
 
-- Démarrer la lecture dans son lecteur, si souhaité, puis toucher la tuile. Le petit cadenas gris disparaît après trois secondes. Un nouvel appui le fait revenir temporairement. Deux appuis brefs et proches désactivent la protection. Les appuis longs, les glissements et les séquences à plusieurs doigts sont absorbés.
+- Démarrer la lecture dans son lecteur, si souhaité, puis toucher la tuile. Le petit cadenas gris disparaît après trois secondes. Un nouvel appui le fait revenir temporairement. Deux appuis brefs et proches, espacés d’au plus 300 ms, désactivent la protection au relâchement du deuxième appui. Les appuis longs, les glissements et les séquences à plusieurs doigts sont absorbés.
 - Si le panneau système est accessible, toucher la tuile active ou l’action **Désactiver** de la notification. La touche Marche/Arrêt reste utilisable. Elle permet de suspendre la couche lors de l’extinction, mais la session peut reprendre après le déverrouillage.
 - Si la couche gêne encore l’utilisation, ouvrir les réglages Android par les commandes système et choisir **Forcer l’arrêt** dans la fiche de l’application quand cette fiche est accessible. Si le panneau et les réglages restent inaccessibles, utiliser le menu système de Marche/Arrêt pour redémarrer. Si le menu est inaccessible ou si le téléphone ne répond pas, utiliser le redémarrage forcé du Redmi, en maintenant la touche Marche/Arrêt jusqu’au redémarrage. La protection ne se réactive jamais au boot. Vérifier les sorties de secours sur le Redmi avec la matrice avant un usage quotidien.
 
